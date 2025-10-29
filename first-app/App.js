@@ -1,88 +1,109 @@
-import React from 'react';
-import { Button, StyleSheet, Text, View, Alert, TextInput, TouchableOpacity } from 'react-native';
-import Finder from './components/Finder';
+import * as React from 'react';
+import { SafeAreaView, ScrollView, Image, StyleSheet, View } from 'react-native';
+import { Card, Avatar, Text, Button } from 'react-native-paper';
+
+const reports = [
+  {
+    id: 1,
+    name: 'Ana Ruiz',
+    location: 'Centro',
+    time: 'Hace 2 horas',
+    description: 'Bache en calle principal',
+    image: require('./assets/camera.png'), // reemplaza por tu imagen
+  },
+  {
+    id: 2,
+    name: 'Alex Beltran',
+    location: 'Parque Sol',
+    time: 'Hace 4 horas',
+    description: 'Basura en los tambos',
+    image: require('./assets/tree.png'),
+  },
+];
 
 export default function App() {
-
   return (
-    <View style={styles.container}>
-      
-      <View style={styles.taskContainer}>
-          <Text style={styles.title}>Lista de Tareas</Text>
-        <View style={styles.writeTaskWrapper }>
-          <TextInput style={styles.input} placeholder={'Ingresa Tarea'} />
-
-          <TouchableOpacity>
-            <View style={styles.addWrapper}>
-              <Text style={styles.addText}>+</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        
-        <View style={styles.items}>
-        
-        <Finder text={'Hacer Tarea'}/>
-        <Finder text={'Subir Codigo'}/>
-        <Finder text={'Agregar Repositorio'}/>
-        
-        </View>
-      
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text variant="titleLarge" style={styles.header}>Feed de Reportes</Text>
+        <Button
+          mode="contained"
+          onPress={() => console.log('Agregar reporte')}
+        >
+          + Agregar
+        </Button>
       </View>
 
-    </View>
-  );
 
+      <ScrollView style={styles.scroll}>
+        {reports.map((report) => (
+          <Card key={report.id} style={styles.card}>
+            <Card.Title
+              title={report.name}
+              subtitle={report.location}
+              left={(props) => <Avatar.Icon {...props} icon="account" />}
+              right={() => <Text style={styles.time}>{report.time}</Text>}
+            />
+            <Card.Content>
+              <Image source={report.image} style={styles.reportImage} />
+              <Text style={styles.description}>{report.description}</Text>
+            </Card.Content>
+            <Card.Actions style={styles.actions}>
+              <Button icon="thumb-up-outline">Like</Button>
+              <Button icon="comment-outline">Comment</Button>
+              <Button icon="share-variant">Share</Button>
+            </Card.Actions>
+          </Card>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000ff',
+    paddingTop: 40,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 28,
+  header: {
     fontWeight: 'bold',
-    color: "#ffffffff",
-    textAlign: 'center',
+    marginBottom: 10,
   },
-  taskContainer: {
-    paddingTop: 80,
-    paddingHorizontal: 20, 
-  },
-  items: {
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 15,
     marginTop: 20,
   },
-  text: {
-    color: "#ffffffff",
-    fontSize: 20,
+  addButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 15,
   },
-  writeTaskWrapper: {
-    top: 60,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 85,
+  scroll: {
+    flex: 1,
   },
-  input: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    backgroundColor: '#FFFF',
+  card: {
+    marginBottom: 15,
     borderRadius: 10,
-    borderColor: '#1c853cff',
-    borderWidth: 1,
-    width: 250, 
+    elevation: 2,
   },
-  addWrapper: {
-    width: 60, 
-    height: 60, 
-    backgroundColor: '#FFF',
-    borderRadius: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 60,
-    borderColor: '#1c853cff',
-    borderWidth: 1,
+  reportImage: {
+    height: 150,
+    width: '100%',
+    resizeMode: 'contain',
+    marginVertical: 10,
   },
-  addText: {},
+  description: {
+    fontSize: 15,
+  },
+  actions: {
+    justifyContent: 'space-around',
+  },
+  time: {
+    marginRight: 10,
+    color: 'gray',
+  },
 });
