@@ -1,109 +1,26 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, Image, StyleSheet, View } from 'react-native';
-import { Card, Avatar, Text, Button } from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import FeedScreen from './components/FeedScreen';
+import LoginScreen from './components/LoginScreen';
 
-const reports = [
-  {
-    id: 1,
-    name: 'Ana Ruiz',
-    location: 'Centro',
-    time: 'Hace 2 horas',
-    description: 'Bache en calle principal',
-    image: require('./assets/camera.png'), 
-  },
-  {
-    id: 2,
-    name: 'Alex Beltran',
-    location: 'Parque Sol',
-    time: 'Hace 4 horas',
-    description: 'Basura en los tambos',
-    image: require('./assets/tree.png'),
-  },
-];
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text variant="titleLarge" style={styles.header}>Feed de Reportes</Text>
-        <Button
-          mode="contained"
-          onPress={() => console.log('Agregar reporte')}
-        >
-          + Agregar
-        </Button>
-      </View>
-
-
-      <ScrollView style={styles.scroll}>
-        {reports.map((report) => (
-          <Card key={report.id} style={styles.card}>
-            <Card.Title
-              title={report.name}
-              subtitle={report.location}
-              left={(props) => <Avatar.Icon {...props} icon="account" />}
-              right={() => <Text style={styles.time}>{report.time}</Text>}
-            />
-            <Card.Content>
-              <Image source={report.image} style={styles.reportImage} />
-              <Text style={styles.description}>{report.description}</Text>
-            </Card.Content>
-            <Card.Actions style={styles.actions}>
-              <Button icon="thumb-up-outline">Like</Button>
-              <Button icon="comment-outline">Comment</Button>
-              <Button icon="share-variant">Share</Button>
-            </Card.Actions>
-          </Card>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Feed">
+        <Stack.Screen
+          name="Feed"
+          component={FeedScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ title: 'Nuevo Reporte' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 40,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-  },
-  header: {
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-    marginTop: 20,
-  },
-  addButton: {
-    alignSelf: 'flex-end',
-    marginBottom: 15,
-  },
-  scroll: {
-    flex: 1,
-  },
-  card: {
-    marginBottom: 15,
-    borderRadius: 10,
-    elevation: 2,
-  },
-  reportImage: {
-    height: 150,
-    width: '100%',
-    resizeMode: 'contain',
-    marginVertical: 10,
-  },
-  description: {
-    fontSize: 15,
-  },
-  actions: {
-    justifyContent: 'space-around',
-  },
-  time: {
-    marginRight: 10,
-    color: 'gray',
-  },
-});
