@@ -33,11 +33,11 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>📍 Ubicación</Text>
+      <Text style={styles.label}>Ubicación</Text>
       <Button mode="contained" onPress={getLocation}>Actualizar ubicación</Button>
       {location && <Text style={styles.subtext}>{location}</Text>}
 
-      <Text style={styles.label}>📸 Imagen</Text>
+      <Text style={styles.label}>Imagen</Text>
       <TouchableOpacity style={styles.imageBox} onPress={pickImage}>
         {image ? (
           <Image source={{ uri: image }} style={styles.imagePreview} />
@@ -46,7 +46,7 @@ export default function LoginScreen() {
         )}
       </TouchableOpacity>
 
-      <Text style={styles.label}>📝 Descripción</Text>
+      <Text style={styles.label}>Descripción</Text>
       <TextInput
         style={styles.input}
         placeholder="Describe el problema que quieres reportar..."
