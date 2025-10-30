@@ -9,7 +9,7 @@ const reports = [
     location: 'Centro',
     time: 'Hace 2 horas',
     description: 'Bache en calle principal',
-    image: require('./assets/camera.png'), // reemplaza por tu imagen
+    image: require('./assets/camera.png'), 
   },
   {
     id: 2,
