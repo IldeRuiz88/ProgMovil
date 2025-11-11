@@ -4,7 +4,7 @@ import * as Location from 'expo-location';
 import * as ImagePicker from 'expo-image-picker';
 import { Button } from 'react-native-paper';
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation, addReport }) {
   const [location, setLocation] = useState(null);
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState('');
@@ -15,27 +15,62 @@ export default function LoginScreen() {
       Alert.alert('Permiso denegado', 'No se puede acceder a la ubicación');
       return;
     }
+
     let loc = await Location.getCurrentPositionAsync({});
-    setLocation(`${loc.coords.latitude.toFixed(4)}, ${loc.coords.longitude.toFixed(4)}`);
+    setLocation({
+      lat: loc.coords.latitude,
+      lng: loc.coords.longitude
+    });
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso denegado', 'No se puede acceder a la cámara');
+      return;
+    }
+
+    let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 0.8,
     });
+
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
   };
 
+  const sendReport = () => {
+    if (!image || !location || description.trim() === '') {
+      Alert.alert('Faltan datos', 'Completa todos los campos antes de enviar.');
+      return;
+    }
+
+    const newReport = {
+      id: Date.now(),
+      name: 'Usuario Anónimo',
+      location: `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`,
+      time: 'Hace un momento',
+      description,
+      image
+    };
+
+    addReport(newReport);
+    Alert.alert('Éxito', 'Reporte enviado');
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Ubicación</Text>
-      <Button mode="contained" onPress={getLocation}>Actualizar ubicación</Button>
-      {location && <Text style={styles.subtext}>{location}</Text>}
+      <Button mode="contained" onPress={getLocation}>
+        Actualizar ubicación
+      </Button>
+      {location && (
+        <Text style={styles.subtext}>
+          {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+        </Text>
+      )}
 
       <Text style={styles.label}>Imagen</Text>
       <TouchableOpacity style={styles.imageBox} onPress={pickImage}>
@@ -55,7 +90,7 @@ export default function LoginScreen() {
         onChangeText={setDescription}
       />
 
-      <Button mode="contained" style={styles.sendButton} onPress={() => Alert.alert('Reporte enviado')}>
+      <Button mode="contained" style={styles.sendButton} onPress={sendReport}>
         Enviar Reporte
       </Button>
     </View>

@@ -2,32 +2,15 @@ import * as React from 'react';
 import { SafeAreaView, ScrollView, Image, StyleSheet, View } from 'react-native';
 import { Card, Avatar, Text, Button } from 'react-native-paper';
 
-const reports = [
-  {
-    id: 1,
-    name: 'Ana Ruiz',
-    location: 'Centro',
-    time: 'Hace 2 horas',
-    description: 'Bache en calle principal',
-    image: require('../assets/camera.png'),
-  },
-  {
-    id: 2,
-    name: 'Alex Beltrán',
-    location: 'Parque Sol',
-    time: 'Hace 4 horas',
-    description: 'Basura en los tambos',
-    image: require('../assets/tree.png'),
-  },
-];
-
-export default function FeedScreen({ navigation }) {
+export default function FeedScreen({ navigation, reports }) {
   return (
     <SafeAreaView style={styles.container}>
+      
       <View style={styles.headerContainer}>
         <Text variant="titleLarge" style={styles.header}>
           Feed de Reportes
         </Text>
+
         <Button
           mode="contained"
           onPress={() => navigation.navigate('Login')}
@@ -45,10 +28,12 @@ export default function FeedScreen({ navigation }) {
               left={(props) => <Avatar.Icon {...props} icon="account" />}
               right={() => <Text style={styles.time}>{report.time}</Text>}
             />
+
             <Card.Content>
-              <Image source={report.image} style={styles.reportImage} />
+              <Image source={{ uri: report.image }} style={styles.reportImage} />
               <Text style={styles.description}>{report.description}</Text>
             </Card.Content>
+
             <Card.Actions style={styles.actions}>
               <Button icon="thumb-up-outline">Like</Button>
               <Button icon="comment-outline">Comment</Button>
@@ -57,6 +42,7 @@ export default function FeedScreen({ navigation }) {
           </Card>
         ))}
       </ScrollView>
+
     </SafeAreaView>
   );
 }
@@ -68,16 +54,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#fff',
   },
-  header: {
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 15,
     marginTop: 20,
+  },
+  header: {
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   scroll: {
     flex: 1,
@@ -90,7 +76,7 @@ const styles = StyleSheet.create({
   reportImage: {
     height: 150,
     width: '100%',
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     marginVertical: 10,
   },
   description: {
